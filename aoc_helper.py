@@ -3,7 +3,7 @@ import os.path
 import datetime
 
 def get_input(day: int, year: int = 2023) -> str:
-    filepath = "input/{}day{}.txt".format(year, day)
+    filepath = "input/{}day{}.txt".format(year, str(day).rjust(2, "0"))
     if os.path.isfile(filepath):
         return open(filepath, "r").read()
 
