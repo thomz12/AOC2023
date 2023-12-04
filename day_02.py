@@ -1,39 +1,25 @@
 from aoc_helper import get_input
+import re
 
 def part1(input: str) -> str:
-    split = input.splitlines()
+    lines = input.splitlines()
     total = 0
-    red_cubes = 12
-    green_cubes = 13
-    blue_cubes = 14
-    for line in split:
-        fail = False
-        split_line = line.split(":")
-        id = int("".join([char for char in split_line[0] if char.isdigit()]))
-        for game in split_line[1].split(";"):
-            reds = sum([int("".join([char for char in cubes if char.isdigit()])) for cubes in game.split(",") if cubes.find("red") != -1])
-            greens = sum([int("".join([char for char in cubes if char.isdigit()])) for cubes in game.split(",") if cubes.find("green") != -1])
-            blues = sum([int("".join([char for char in cubes if char.isdigit()])) for cubes in game.split(",") if cubes.find("blue") != -1])
-            if reds > red_cubes or greens > green_cubes or blues > blue_cubes:
-                fail = True
-                break
-        if not fail:
-            total += id
+    for line in range(len(lines)):
+        reds = all([int(val) <= 12 for val in re.findall("\\d+(?= red)", lines[line])])
+        greens = all([int(val) <= 13 for val in re.findall("\\d+(?= green)", lines[line])])
+        blues = all([int(val) <= 14 for val in re.findall("\\d+(?= blue)", lines[line])])
+        if reds and greens and blues:
+            total += line + 1
     return total
 
 def part2(input: str) -> str:
-    split = input.splitlines()
+    lines = input.splitlines()
     total = 0
-    for line in split:
-        split_line = line.split(":")
-        red = []
-        green = []
-        blue = []
-        for game in split_line[1].split(";"):
-            red.append(sum([int("".join([char for char in cubes if char.isdigit()])) for cubes in game.split(",") if cubes.find("red") != -1]))
-            green.append(sum([int("".join([char for char in cubes if char.isdigit()])) for cubes in game.split(",") if cubes.find("green") != -1]))
-            blue.append(sum([int("".join([char for char in cubes if char.isdigit()])) for cubes in game.split(",") if cubes.find("blue") != -1]))
-        total += max(red) * max(green) * max(blue)
+    for line in range(len(lines)):
+        reds = max([int(val) for val in re.findall("\\d+(?= red)", lines[line])])
+        greens = max([int(val) for val in re.findall("\\d+(?= green)", lines[line])])
+        blues = max([int(val) for val in re.findall("\\d+(?= blue)", lines[line])])
+        total += reds * greens * blues
     return total
 
 if __name__ == "__main__":
